@@ -34,10 +34,14 @@ App Engine application for the Udacity training course.
 I did not use inheritance for Session. I prefer to explicitly define a property ('conference') to define the relation. It seems more logical and the code appers to be more readable.
 I used Memcache for featured speakers as a Task inside _createSessionObject(). When a session is put in the datastore the task checks if the speaker has more than one session in that conference. mem_key is the key for Memcache I used string {websafeConferenceKey}:featured, to specify that is referred to featured speakers of a given Conference.
 ## Session Endpoints
-sessions/create/{ConferenceKey} -> conference.createSession	
-sessions/{ConferenceKey} -> conference.getConferenceSessions	
-sessions/by/speaker/{speakerName} -> conference.getSessionsBySpeaker	
-sessions/{ConferenceKey}/type/{sessionType} -> conference.getConferenceSessionsByType	
+sessions/create/{ConferenceKey} -> conference.createSession
+
+sessions/{ConferenceKey} -> conference.getConferenceSessions
+
+sessions/by/speaker/{speakerName} -> conference.getSessionsBySpeaker
+
+sessions/{ConferenceKey}/type/{sessionType} -> conference.getConferenceSessionsByType
+
 ## featuredSpeaker Endpoint
 conference/{websafeConferenceKey}/featuredSpeaker -> conference.getFeaturedSpeaker	
 
@@ -45,7 +49,8 @@ conference/{websafeConferenceKey}/featuredSpeaker -> conference.getFeaturedSpeak
 I added the wishlist as a property ('sessionKeysWishlist') in the Profile model. This is the most efficient way to do it.
 The SessionKey can be retrieved via conference.getConferenceSessions.
 ## wishlist Endpoints
-wishlist/add/{websafeSessionKey} -> conference.addSessionToWishlist	
+wishlist/add/{websafeSessionKey} -> conference.addSessionToWishlist
+
 wishlist/get -> conference.getSessionsInWishlist	
 
 ## Task 3 and Query Problem

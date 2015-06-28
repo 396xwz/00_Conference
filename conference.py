@@ -747,6 +747,25 @@ class ConferenceApi(remote.Service):
             items=[self._copySessionToForm(session) for session in sessions]
         )
 
+    @endpoints.method(SESSION_GET_REQUEST, SessionForms,
+            path='SpecialQuery/{websafeConferenceKey}',
+            http_method='GET', name='SpecialQuery')
+    def getSpecialQuery(self, request):
+       """Get all the session for a Conference before 7pm, and that are non-workshop types"""
+       try:
+          #request.sessionType != "workshop" and startTime > 19:00
+	  nonworkshopsessions = self._get_sessions_in_a_conference(request.websafeConferenceKey).filter(Session.typeOfSession != "workshop").fetch()
+          sessions = [t for t in nonworkshopsessions if t.startTime < datetime.strptime('19:00', '%H:%M').time()]
+          if (sessions == ""):
+		print "No sessions found"
+       except Exception:
+            # if type value is not among model's choices
+            raise endpoints.NotFoundException(
+                'BadValueError: ')
+       return SessionForms(
+            items=[self._copySessionToForm(session) for session in sessions]
+        )
+ 
     @endpoints.method(DATE_GET_REQUEST, SessionForms,
             path='sessions/{websafeConferenceKey}/by/date/{conferenceDate}',
             http_method='GET', name='getConferenceSessionsByDate')

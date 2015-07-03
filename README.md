@@ -45,11 +45,44 @@ sessions/{ConferenceKey}/type/{sessionType} -> conference.getConferenceSessionsB
 ## featuredSpeaker Endpoint
 conference/{websafeConferenceKey}/featuredSpeaker -> conference.getFeaturedSpeaker	
 
-## Task 2 Add Sessions to User Wishlist
+## Models
+class FeaturedSpeakerForm
+speaker and session -> messages.StringField
+
+class FeaturedSpeakerMessage
+featured and websafeKey -> messages.MessageField
+
+class SessionForms
+items -> messages.MessageField
+
+class SessionForm
+
+name -> messages.StringField
+highlights -> messages.StringField
+speaker -> messages.StringField
+duration -> messages.IntegerField
+startDate -> messages.StringField
+startTime -> messages.StringField
+typeOfSession -> messages.StringField
+sessionKey -> messages.StringField
+class Session
+_use_memcache -> True
+typeOfSession -> ndb.StringProperty
+speaker,name,duration,startDate,startTime,highlights,conference -> ndb.StringProperty
+ 
+class ConferenceQueryForm
+field,operator,value -> messages.StringField
+
+class ConferenceForm
+name,description,organizerUserId,topics,city,startDate,endDate,websafeKey,organizerDisplayName -> messages.StringField
+month,maxAttendees,seatsAvailable -> messages.IntegerField
+
+## Task 2: Add Sessions to User Wishlist
 I added the wishlist as a property ('sessionKeysWishlist') in the Profile model. This is the most efficient way to do it.
 The SessionKey can be retrieved via conference.getConferenceSessions.
 ## wishlist Endpoints
 wishlist/add/{websafeSessionKey} -> conference.addSessionToWishlist
+
 wishlist/get -> conference.getSessionsInWishlist	
 
 ## Task 3 and Query Problem
@@ -57,6 +90,5 @@ I added the index needed by the queries for Session objects in the index.yaml fi
 The problem with the query is that datastore will reject queries using inequality filtering on more than one property. To solve the issue, instead of specifying an entire query filter in a single expression, build it up in steps, by iterating the results of the 1st filter until objects of the 2nd filter are found. See SpecialQuery implementation.
 ## SpecialQuery Endpoint
 SpecialQuery/{websafeConferenceKey}
-
 
 
